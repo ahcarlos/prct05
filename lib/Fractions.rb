@@ -1,4 +1,4 @@
-require './gcd.rb'
+require '/home/ubuntu/workspace/lib/gcd.rb'
 
 class Fractions
     
@@ -81,7 +81,20 @@ class Fractions
         return denom, num
     end
     
-    
+  def *(value)
+    Fractions.new(@numerador * value, @denominador)
+  end
+  
+  def -@
+      
+    Fractions.new(@numerador * -1, @denominador)
+  end
+  
+  
+  def + (other)
+    Fractions.new(@numerador, @denominador).suma(other.numerador, other.denominador)
+  end
+
     
     
     
