@@ -1,25 +1,26 @@
+require './gcd.rb'
+
 class Fractions
     
-    attr_reader :x, :y
+    attr_reader :numerador, :denominador
     
     def initialize(num, denom)
-        mcd= gcd(num, denom)
-        @numerador= num / mcd
-        @denominador= denom / mcd
+        @numerador, @denominador= simplifica(num, denom)
     end
     
     def to_s
-        "#{@numerador} / #{@denominador}"
+        "(#{@numerador}/#{@denominador})"
     end
     
     
-    #funcion maximo comun divisor
-    def gcd(u, v)
-        u, v= u.abs, v.abs
-        while v != 0
-            u, v= v, u % v
-        end
-        u
+    def simplifica(num, denom)
+        
+        max= gcd(num, denom)
+        
+        num /= max
+        denom /= max 
+        
+        return num, denom
     end
     
     #funcion minimo comun multiplo
@@ -29,40 +30,43 @@ class Fractions
     end
     
     
-    #retornan el valor del numerador y el denominador (geters)
-    def num
-        return @numerador
-    end
-    
-    def denom
-        return @denominador
-    end
-    
     #suma
     def suma(num, denom)
+        num, denom= simplifica(num, denom)
         if(denom == @denominador)
             @numerador += num
+            num, denom= simplifica(@numerador, @denominador)
+            
         else
             denom_2= mcm(@denominador, denom)
             num_res= ((denom_2 / @denominador )* @numerador) + ((denom_2 / denom) * num)
+            num, denom= simplifica(num_res, denom_2)
         end
         
-        return num_res
+        return num, denom
     end
+    
     
     #resta
     def resta(num, denom)
-        if(@denominador == denom)
+        num, denom= simplifica(num, denom)
+        
+        if(denom == @denominador)
             @numerador -= num
+            num, denom= simplifica(@numerador, @denominador)
+            
         else
             denom_2= mcm(@denominador, denom)
-            num_res= ((denom_2 / @denominador) * @numerador) - ((denom_2 / denom) * num)
+            num_res= ((denom_2 / @denominador )* @numerador) - ((denom_2 / denom) * num)
+            num, denom= simplifica(num_res, denom_2)
         end
         
-        return num_res
+        return num, denom
     end
     
+    
     def producto(num, denom)
+        
         num *= @numerador
         denom *= @denominador
         
@@ -74,7 +78,13 @@ class Fractions
         num *= @denominador
         denom *= @numerador
         
-        return num, denom
+        return denom, num
     end
+    
+    
+    
+    
+    
+    
     
 end
